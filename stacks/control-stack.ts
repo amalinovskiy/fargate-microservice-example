@@ -44,7 +44,7 @@ export class ControlStack extends cdk.Stack {
         for (let i = 0; i < SERVICE_ACCOUNTS.length; i++) {
             for (let j = 0; j < SERVICES.length; j++) {
                 const oauthScope = cognito.OAuthScope.resourceServer(
-                    resourceServer, resourceScopes[i*SERVICE_ACCOUNTS.length + j]
+                    resourceServer, resourceScopes[i*SERVICES.length + j]
                 );
                 oauthScopes.push(oauthScope);
             }
