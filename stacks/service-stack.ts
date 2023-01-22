@@ -80,7 +80,7 @@ export class ServiceStack extends cdk.Stack {
             loadBalancer: this.loadBalancer,
             openListener: false,
         });
-        this.loadBalancerListener = this.service.listner;
+        this.loadBalancerListener = this.service.listener;
     }
 
     private setupApiGateway(userPool: cognito.UserPool, userPoolClient: cognito.UserPoolClient, scopeName: string) {
