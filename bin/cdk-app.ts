@@ -3,6 +3,7 @@ import * as cdk from 'aws-cdk-lib';
 
 import { ControlStack } from '../stacks/control-stack';
 import { ServiceStack } from '../stacks/service-stack';
+import { ServiceBaseStack } from '../stacks/service-base-stack';
 import { CONTROL_ACCOUNT, SERVICE_ACCOUNTS, ServiceAccount } from '../config/accounts'
 import { SERVICES } from '../config/services'
 
