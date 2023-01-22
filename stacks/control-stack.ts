@@ -76,7 +76,7 @@ export class ControlStack extends cdk.Stack {
         });
 
         new cdk.CfnOutput(this, 'service-user-pool', {
-            value: userPool.userPoolArn,
+            value: this.userPool.userPoolArn,
         });
     }
 }
