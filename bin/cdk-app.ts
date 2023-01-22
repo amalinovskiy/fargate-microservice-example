@@ -31,6 +31,7 @@ function createServiceAccountInfrastructure(account: ServiceAccount) {
         new ServiceStack(app, `service-${service.name}-${account.name}`, {
             stackName: `service-${service.name}-${account.name}`,
             account: account,
+            name: service.name,
             vpc: baseStack.vpc,
             cluster: baseStack.cluster,
             userPool: controlStack.userPool,
