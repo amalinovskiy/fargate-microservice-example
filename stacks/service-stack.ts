@@ -4,6 +4,7 @@ import * as apigateway from '@aws-cdk/aws-apigatewayv2-alpha';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as cdk from 'aws-cdk-lib';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecs_patterns from 'aws-cdk-lib/aws-ecs-patterns';
 import { HttpAlbIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { HttpUserPoolAuthorizer } from '@aws-cdk/aws-apigatewayv2-authorizers-alpha';
@@ -30,7 +31,7 @@ export class ServiceStack extends cdk.Stack {
         this.name = props.name;
 
         this.setupLoadBalancer(props.vpc);
-        this.setupFargateService(props.account.region);
+        this.setupFargateService(props.vpc);
         this.setupApiGateway(props.userPool, props.userPoolClient, `${this.name}-${props.account.name}`);
 
         new cdk.CfnOutput(this, `${this.name}-api-endpoint`, {
@@ -69,7 +70,7 @@ export class ServiceStack extends cdk.Stack {
         }
     }
 
-    private setupApiGateway(userPool: UserPool, userPoolClient: UserPoolClient, scopeName: string) {
+    private setupApiGateway(userPool: cognito.UserPool, userPoolClient: cognito.UserPoolClient, scopeName: string) {
         const cognitoAuthorizer = new HttpUserPoolAuthorizer(`${this.name}-authorizer`, userPool, {
             userPoolClients: [userPoolClient],
             userPoolRegion: CONTROL_ACCOUNT.region,
