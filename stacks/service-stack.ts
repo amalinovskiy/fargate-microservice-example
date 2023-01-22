@@ -24,6 +24,7 @@ export class ServiceStack extends cdk.Stack {
     private name: string;
     private loadBalancer!: elb.ApplicationLoadBalancer;
     private loadBalancerListener!: elb.ApplicationListener;
+    private service!: ecs_patterns.ApplicationLoadBalancedFargateService;
     private httpApi!: apigateway.HttpApi;
 
     constructor(scope: cdk.App, id: string, props: ServiceProps) {
@@ -69,7 +70,7 @@ export class ServiceStack extends cdk.Stack {
             taskSecurityGroup.addIngressRule(ec2.Peer.ipv4(privateSubnet.ipv4CidrBlock), ec2.Port.tcp(80));
         }
 
-        const service = new ecs_patterns.ApplicationLoadBalancedFargateService(this, `${this.name}-service`, {
+        this.service = new ecs_patterns.ApplicationLoadBalancedFargateService(this, `${this.name}-service`, {
             cluster: cluster,
             cpu: 512,
             desiredCount: 3,
