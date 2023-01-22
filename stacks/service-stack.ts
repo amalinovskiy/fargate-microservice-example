@@ -30,8 +30,8 @@ export class ServiceStack extends cdk.Stack {
         super(scope, id, props);
         this.name = props.name;
 
-        this.setupLoadBalancer(props.vpc);
-        this.setupFargateService(props.vpc);
+        this.setupLoadBalancer(props.vpc);        
+        this.setupFargateService(props.vpc, props.cluster);
         this.setupApiGateway(props.userPool, props.userPoolClient, `${this.name}-${props.account.name}`);
 
         new cdk.CfnOutput(this, `${this.name}-api-endpoint`, {
@@ -54,7 +54,7 @@ export class ServiceStack extends cdk.Stack {
         });
     }
 
-    private setupFargateService(vpc: ec2.Vpc) {
+    private setupFargateService(vpc: ec2.Vpc, cluster: ecs.Cluster) {
         // Setting up service security groups, they are not public internet facing 
         // and can only be accessed by port 80
         const selectedSubnets = vpc.selectSubnets({
@@ -68,6 +68,18 @@ export class ServiceStack extends cdk.Stack {
         for (const privateSubnet of selectedSubnets.subnets) {
             taskSecurityGroup.addIngressRule(ec2.Peer.ipv4(privateSubnet.ipv4CidrBlock), ec2.Port.tcp(80));
         }
+
+        const service = new ecs_patterns.ApplicationLoadBalancedFargateService(this, `${this.name}-service`, {
+            cluster: cluster,
+            cpu: 512,
+            desiredCount: 3,
+            taskImageOptions: { image: ecs.ContainerImage.fromRegistry('amazon/amazon-ecs-sample') },
+            memoryLimitMiB: 2048,
+            publicLoadBalancer: false,
+            loadBalancer: this.loadBalancer,
+            openListener: false,
+        });
+        this.loadBalancerListener = this.service.listner;
     }
 
     private setupApiGateway(userPool: cognito.UserPool, userPoolClient: cognito.UserPoolClient, scopeName: string) {
