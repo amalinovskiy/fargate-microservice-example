@@ -26,7 +26,7 @@ export class ServiceBaseStack extends cdk.Stack {
         });
 
         this.cluster = new ecs.Cluster(this, 'common-cluster', {
-            vpc: vpc
+            vpc: this.vpc,
         });        
     }
 }
