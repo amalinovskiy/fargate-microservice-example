@@ -18,19 +18,20 @@ export class ControlStack extends cdk.Stack {
             selfSignUpEnabled: false,
         });
 
-        const domainName = userPool.addDomain('domain-name', {
+        const domainName = this.userPool.addDomain('domain-name', {
             cognitoDomain: {
                 domainPrefix: `${PREFIX}-services`
             }
         });
 
-        const resourceScopes: cognito.ResourceServerScope[];
+        const resourceScopes: cognito.ResourceServerScope[] = [];
         for (let i = 0; i < SERVICE_ACCOUNTS.length; i++) {
-            for (let j = 0; j < SERVICES.length; j++) {
+            var account = SERVICE_ACCOUNTS[i];
+            SERVICES.map(service => {
                 resourceScopes.push(
                     { scopeName: `${service.name}-${account.name}`, scopeDescription: `access to ${service.name} on ${account.name}`}
                 );
-            }
+            });
         }
 
         const resourceServer: cognito.IUserPoolResourceServer = this.userPool.addResourceServer('resource-server', {
