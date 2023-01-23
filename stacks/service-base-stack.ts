@@ -20,7 +20,7 @@ export class ServiceBaseStack extends cdk.Stack {
             natGateways: 1,
             subnetConfiguration: [
                 { name: 'isolated-subnet', subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
-                { name: 'private-subnet', subnetType: ec2.SubnetType.PRIVATE_WITH_NAT },
+                { name: 'private-subnet', subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
                 { name: 'public-subnet', subnetType: ec2.SubnetType.PUBLIC },
             ],
         });

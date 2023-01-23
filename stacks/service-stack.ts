@@ -16,8 +16,8 @@ interface ServiceProps extends cdk.StackProps {
     account: ServiceAccount;
     vpc: ec2.Vpc;
     cluster: ecs.Cluster;
-    userPool: cognito.UserPool;
-    userPoolClient: cognito.UserPoolClient;
+    userPoolArn: string;
+    userPoolClientId: string;
 }
 
 export class ServiceStack extends cdk.Stack {
@@ -83,7 +83,9 @@ export class ServiceStack extends cdk.Stack {
         this.loadBalancerListener = this.service.listener;
     }
 
-    private setupApiGateway(userPool: cognito.UserPool, userPoolClient: cognito.UserPoolClient, scopeName: string) {
+    private setupApiGateway(userPoolArn: string, userPoolClientId: string, scopeName: string) {
+        const userPool = cognito.UserPool.fromUserPoolArn(this, `${this.name}-user-pool`, userPoolArn);
+        const userPoolClient = cognito.UserPoolClient.fromUserPoolClientId(this, `${this.name}-user-pool-client`, userPoolClientId);
         const cognitoAuthorizer = new HttpUserPoolAuthorizer(`${this.name}-authorizer`, userPool, {
             userPoolClients: [userPoolClient],
             userPoolRegion: CONTROL_ACCOUNT.region,
@@ -93,7 +95,7 @@ export class ServiceStack extends cdk.Stack {
         this.httpApi = new apigateway.HttpApi(this, `${this.name}-api`, {
             defaultIntegration: new HttpAlbIntegration(`${this.name}-alb-integration`, this.loadBalancerListener),
             defaultAuthorizer: cognitoAuthorizer,
-            defaultAuthorizationScopes: ['example-services/' + scopeName],
+            defaultAuthorizationScopes: [`example-services/${scopeName}`],
         });
     }
 }

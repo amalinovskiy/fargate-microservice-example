@@ -3,5 +3,5 @@ export interface Service {
 }
 
 export const SERVICES: Service[] = [
-   { name: 'example' },
+   { name: 'example', userPoolClientId: 'clientId' },
 ]
