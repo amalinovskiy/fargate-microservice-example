@@ -3,7 +3,7 @@ import * as cdk from 'aws-cdk-lib';
 
 import { ServiceStack } from '../stacks/service-stack';
 import { ServiceBaseStack } from '../stacks/service-base-stack';
-import { SERVICE_ACCOUNTS, ServiceAccount } from '../config/accounts'
+import { CONTROL_ACCOUNT, SERVICE_ACCOUNTS, ServiceAccount } from '../config/accounts'
 import { SERVICES } from '../config/services'
 
 const app = new cdk.App();
@@ -25,7 +25,7 @@ function createServiceAccountInfrastructure(account: ServiceAccount) {
             name: service.name,
             vpc: baseStack.vpc,
             cluster: baseStack.cluster,
-            userPoolArn: account.userPoolArn,
+            userPoolArn: CONTROL_ACCOUNT.userPoolArn,
             userPoolClientId: service.userPoolClientId,
             env: {
                 region: account.region,
