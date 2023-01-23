@@ -33,7 +33,7 @@ export class ServiceStack extends cdk.Stack {
 
         this.setupLoadBalancer(props.vpc);        
         this.setupFargateService(props.vpc, props.cluster);
-        this.setupApiGateway(props.userPool, props.userPoolClient, `${this.name}-${props.account.name}`);
+        this.setupApiGateway(props.userPoolArn, props.userPoolClientId, `${this.name}-${props.account.name}`);
 
         new cdk.CfnOutput(this, `${this.name}-api-endpoint`, {
             value: this.httpApi.apiEndpoint,
