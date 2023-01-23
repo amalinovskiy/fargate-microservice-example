@@ -1,21 +1,12 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
 
-import { ControlStack } from '../stacks/control-stack';
 import { ServiceStack } from '../stacks/service-stack';
 import { ServiceBaseStack } from '../stacks/service-base-stack';
-import { CONTROL_ACCOUNT, SERVICE_ACCOUNTS, ServiceAccount } from '../config/accounts'
+import { SERVICE_ACCOUNTS, ServiceAccount } from '../config/accounts'
 import { SERVICES } from '../config/services'
 
 const app = new cdk.App();
-
-const controlStack = new ControlStack(app, 'control-stack', {
-    stackName: 'control-stack',
-    env: {
-        region: CONTROL_ACCOUNT.region,
-        account: CONTROL_ACCOUNT.id,
-    },
-});
 
 function createServiceAccountInfrastructure(account: ServiceAccount) {
     const baseStack = new ServiceBaseStack(app, `service-base-${account.name}`, {
@@ -34,8 +25,8 @@ function createServiceAccountInfrastructure(account: ServiceAccount) {
             name: service.name,
             vpc: baseStack.vpc,
             cluster: baseStack.cluster,
-            userPool: controlStack.userPool,
-            userPoolClient: controlStack.userPoolClient,
+            userPoolArn: account.userPoolArn,
+            userPoolClientId: service.userPoolClientId,
             env: {
                 region: account.region,
                 account: account.id,
