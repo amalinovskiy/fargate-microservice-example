@@ -15,7 +15,6 @@ export interface ServiceAccount {
 export const CONTROL_ACCOUNT = { 
     id: '207722082920', 
     region: 'us-west-2', 
-    userPoolArn: 'arn:aws:cognito-idp:us-east-1:123412341234:userpool/us-east-1_123412341',
 }
 
 // Accounts with sample micro service infrastructure
