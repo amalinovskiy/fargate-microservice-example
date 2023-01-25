@@ -25,8 +25,8 @@ function createServiceAccountInfrastructure(account: ServiceAccount) {
             name: service.name,
             vpc: baseStack.vpc,
             cluster: baseStack.cluster,
-            userPoolArn: this.node.tryGetContext('userPoolArn'),
-            userPoolClientId: this.node.tryGetContext('userPoolClientId'),
+            userPoolArn: app.node.tryGetContext('userPoolArn'),
+            userPoolClientId: app.node.tryGetContext('userPoolClientId'),
             env: {
                 region: account.region,
                 account: account.id,
