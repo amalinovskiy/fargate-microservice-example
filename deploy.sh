@@ -10,7 +10,7 @@ aws_secret_access_key = %s
 aws_session_token = %s
 ' $AWS_ACCESS_KEY_ID $AWS_ACCESS_KEY_SECRET $AWS_SESSION_TOKEN > ~/.aws/credentials
 
-cdk deploy
+cdk deploy $3
 
 # Bring back original credentials
 cp ~/.aws/credentials.bak ~/.aws/credentials
