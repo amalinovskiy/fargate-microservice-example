@@ -1,4 +1,4 @@
-# Example auth server
+# Example Fargate Service
 
 Describes and deploys an example microservice based on fargate platform
 
